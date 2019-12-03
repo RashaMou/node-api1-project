@@ -35,7 +35,22 @@ server.post("/api/users", (req, res) => {
     });
 });
 
-server.get("/api/users/:id");
+server.get("/api/users/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.findById(id)
+    .then(retrieved => {
+      if (retrieved) {
+        res.status(200).json({ message: "user added successfully", retrieved });
+      } else {
+        res.status(404).json({ message: "user not found" });
+      }
+    })
+    .catch(error => {
+      console.log("error on GET /users/:id", error);
+      res.status(500).json({ errorMessage: "error retrieving user by id" });
+    });
+});
 
 server.delete("/api/users/:id");
 
