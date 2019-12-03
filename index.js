@@ -15,13 +15,25 @@ server.get("/api/users", (req, res) => {
       res.status(200).json(users);
     })
     .catch(error => {
+      console.log("error on GET /users", error);
       res
         .status(500)
         .json({ errorMessage: "error getting list of users from database" });
     });
 });
 
-server.post("/api/users");
+server.post("/api/users", (req, res) => {
+  const userData = req.body;
+
+  db.insert(userData)
+    .then(user => {
+      res.status(201).json(user);
+    })
+    .catch(error => {
+      console.log("error on POST /users", error);
+      res.status(500).json({ errorMessage: "error adding user to database" });
+    });
+});
 
 server.get("/api/users/:id");
 
