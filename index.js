@@ -52,7 +52,22 @@ server.get("/api/users/:id", (req, res) => {
     });
 });
 
-server.delete("/api/users/:id");
+server.delete("/api/users/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.remove(id)
+    .then(removed => {
+      if (removed) {
+        res.status(200).json({ message: "user removed successfully", removed });
+      } else {
+        res.status(404).json({ message: "user not found" });
+      }
+    })
+    .catch(error => {
+      console.log("error on GET /users/:id", error);
+      res.status(500).json({ errorMessage: "error retrieving user by id" });
+    });
+});
 
 server.put("/api/users/:id");
 
